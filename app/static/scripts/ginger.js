@@ -364,6 +364,7 @@ var Ginger = function() {
   }
 
   function loadTextures(callback) {
+    // return callback()
     var goal = Object.keys(textures).length;
     var progress = 0;
 
@@ -429,16 +430,14 @@ var Ginger = function() {
         if (meshes[mesh].texture !== null) {
           texture = meshes[mesh].texture.texture;
         }
+
         if (meshes[mesh].normalmap !== null) {
           normalmap = meshes[mesh].normalmap.texture;
-        }
-        if (meshes[mesh].color !== null) {
-          color = meshes[mesh].color;
         }
 
         var material = new THREE.MeshLambertMaterial({
           map: texture,
-          color: color,
+          color:  meshes[mesh].color,
           normalmap: normalmap,
           vertexColors: THREE.FaceColors,
           shading: THREE.SmoothShading,
@@ -489,7 +488,7 @@ var Ginger = function() {
   }
 
   function ontouchmove(event) {
-    
+
     if(event.type == "touchmove") {
       event.preventDefault();
     }
@@ -558,49 +557,6 @@ var Ginger = function() {
     select(value);
   }
 
-  function onsharepress(event) {
-    var modal = document.getElementById('share-modal');
-    modal.classList.remove('hidden');
-
-    var shareLink = document.getElementById('share-link');
-    shareLink.value = generateShareLink();
-  }
-
-  function onsharedismiss(event) {
-    var modal = document.getElementById('share-modal');
-    modal.classList.add('hidden');
-  }
-
-  function onscreenshotpress(event) {
-    var counter = document.getElementById('counter');
-    counter.classList.remove('hidden');
-
-    var countdown = 3;
-
-    // Recursive countdown until the countdown is less than 0.
-    var count = function() {
-      countdown--;
-      counter.innerHTML = countdown + 1;
-
-      if (countdown < 0) {
-        screenshot();
-        counter.classList.add('hidden');
-        countingDown = false;
-
-        return;
-      }
-
-      countingDown = true;
-
-      // The countdown is not done so schedule another one.
-      window.setTimeout(count, 1000);
-    };
-
-    if (!countingDown) {
-      count();
-    }
-  }
-
   function onmousetrack(event) {
     mousetracking = !mousetracking;
 
@@ -611,20 +567,6 @@ var Ginger = function() {
     elButton.className = 'buttoncolor-' + offon;
   }
 
-  function onscreenshotdismiss(event) {
-    var modal = document.getElementById('screenshot-modal');
-    modal.classList.add('hidden');
-  }
-
-  function screenshot() {
-    var modal = document.getElementById('screenshot-modal');
-    modal.classList.remove('hidden');
-
-    var getImage = renderer.domElement.toDataURL('image/jpeg', 0.8);
-
-    var image = document.getElementById('screenshot-image');
-    image.src = getImage;
-  }
 
   function select(value) {
     var selectControl;
@@ -752,9 +694,7 @@ var Ginger = function() {
       document.getElementById('range').onchange = onrangeslide;
       document.getElementById('range').oninput = onrangeslide;
       document.getElementById('morph').onchange = onselect;
-      document.getElementById('share').onclick = onsharepress;
       document.getElementById('mousetrack').onclick = onmousetrack;
-      document.getElementById('screenshot').onclick = onscreenshotpress;
 
       // Parse the url substring for GET parameters and put them
       // in a dictionary.
