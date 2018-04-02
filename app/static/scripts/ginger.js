@@ -15,9 +15,6 @@ var Ginger = function() {
   // True when all the meshes are loaded.
   var loaded = false;
 
-  // Prevent duplicate screenshot countdowns.
-  var countingDown = false;
-
   var slider = document.getElementById('range');
   var selected = 'eyes';
 
@@ -92,6 +89,13 @@ var Ginger = function() {
     },
     gingertongue: {
       path: 'model/gingertongue.json',
+      color: new THREE.Color('rgb(255,0,0)'),
+      normalmap: null,
+      morphTargets: true,
+      mesh: null
+    },
+    cube: {
+      path: 'model/cube.json',
       texture: textures.gingercolor,
       normalmap: null,
       morphTargets: true,
@@ -617,31 +621,6 @@ var Ginger = function() {
     return url;
   }
 
-  function parseShareLink() {
-    // Remove the "?" from the beginning of querystring whilst assigning.
-    var querystring = window.location.search.substring(1);
-
-    // Pairs are separated by ampersands.
-    var pairs = querystring.split('&');
-
-    // Map of GET params to be returned.
-    var map = {};
-
-    for (var i = 0; i < pairs.length; i++) {
-      var pair = pairs[i].split('=');
-
-      if (pair.length != 2) {
-        continue;
-      }
-
-      var name = decodeURIComponent(pair[0]);
-      var value = decodeURIComponent(pair[1]);
-      map[name] = value;
-    }
-
-    return map;
-  }
-
   function recalculateAspect() {
     aspect = window.innerWidth / window.innerHeight;
     camera.aspect = aspect;
@@ -695,19 +674,6 @@ var Ginger = function() {
       document.getElementById('range').oninput = onrangeslide;
       document.getElementById('morph').onchange = onselect;
       document.getElementById('mousetrack').onclick = onmousetrack;
-
-      // Parse the url substring for GET parameters and put them
-      // in a dictionary.
-      var sharedParams = parseShareLink();
-
-      // Set the initial values of ginger to the values in the GET params.
-      for (var control in controls) {
-        var selectedControl = controls[control];
-
-        if (sharedParams[selectedControl.control] !== undefined) {
-          updateMorph(sharedParams[selectedControl.control], selectedControl.control);
-        }
-      }
 
       // Let there be light! The light is simply a directional light that
       // shines directly inter Ginger's face.
