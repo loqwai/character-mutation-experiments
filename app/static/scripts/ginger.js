@@ -40,6 +40,13 @@ var Ginger = function() {
       morphTargets: true,
       mesh: null
     },
+    cube: {
+      path: 'model/cube4.json',
+      texture: textures.gingercolor,
+      normalmap: textures.gingercolornormal,
+      morphTargets: true,
+      mesh: null
+    },
     gingerheadband: {
       path: 'model/gingerheadband.json',
       texture: textures.gingercolor,
@@ -56,7 +63,7 @@ var Ginger = function() {
       mesh: null
     },
     gingerlefteye: {
-      path: 'model/gingerlefteye.json',
+      path: 'model/cube5.json',
       texture: textures.gingercolor,
       normalmap: null,
       morphTargets: false,
@@ -89,18 +96,11 @@ var Ginger = function() {
     },
     gingertongue: {
       path: 'model/gingertongue.json',
-      color: new THREE.Color('rgb(255,0,0)'),
-      normalmap: null,
-      morphTargets: true,
-      mesh: null
-    },
-    cube: {
-      path: 'model/cube.json',
       texture: textures.gingercolor,
       normalmap: null,
       morphTargets: true,
       mesh: null
-    }
+    },
   };
 
   var morphs = {
@@ -447,7 +447,7 @@ var Ginger = function() {
           shading: THREE.SmoothShading,
           morphTargets: meshes[mesh].morphTargets
         });
-
+        console.log(geometry)
         meshes[mesh].mesh = new THREE.Mesh(geometry, material);
         progress++;
 
